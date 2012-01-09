@@ -449,7 +449,14 @@ EOM
           custom_formatter(formatter_to_use) ||
           (raise ArgumentError, "Formatter '#{formatter_to_use}' unknown - maybe you meant 'documentation' or 'progress'?.")
 
-        formatters << formatter_class.new(path ? file_at(path) : output)
+        default_output = default_output_stream(formatter_class)
+        formatters << formatter_class.new(path ? file_at(path) : default_output)
+      end
+
+      # @private
+      def default_output_stream(klass)
+        path = klass.default_output_path
+        path ? file_at(path) : output
       end
 
       alias_method :formatter=, :add_formatter
@@ -795,6 +802,9 @@ MESSAGE
         when 'p', 'progress'
           require 'rspec/core/formatters/progress_formatter'
           RSpec::Core::Formatters::ProgressFormatter
+        when 'f', 'failures'
+          require 'rspec/core/formatters/failures_formatter'
+          RSpec::Core::Formatters::FailuresFormatter
         end
       end
 

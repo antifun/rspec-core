@@ -19,6 +19,13 @@ module RSpec
           line
         end
 
+        # If nil, output to standard output by default. Otherwise
+        # output to a file at this path. The output may always be
+        # overridden using an -o/--out argument.
+        def self.default_output_path
+          nil
+        end
+
         def initialize(output)
           @output = output || StringIO.new
           @example_count = @pending_count = @failure_count = 0

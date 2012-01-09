@@ -92,6 +92,7 @@ module RSpec::Core
                 '  [d]ocumentation (group and example names)',
                 '  [h]tml',
                 '  [t]extmate',
+                '  [f]ailures',
                 '  custom formatter class name') do |o|
           options[:formatters] ||= []
           options[:formatters] << [o]

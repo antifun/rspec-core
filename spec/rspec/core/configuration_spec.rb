@@ -619,6 +619,44 @@ module RSpec::Core
         lambda { config.add_formatter :progresss }.should raise_error(ArgumentError)
       end
 
+      context "for a formatter with a default output path" do
+        before do
+          klass = Class.new(Formatters::BaseFormatter)
+          def klass.default_output_path
+            "#{Dir.tmpdir}/default_output"
+          end
+          Object.const_set(:TestFormatter, klass)
+        end
+
+        after do
+          Object.send(:remove_const, :TestFormatter)
+        end
+
+        it "sets the output to this file by default" do
+          config.add_formatter TestFormatter
+          formatter = config.formatters.first
+          formatter.output.path.should == "#{Dir.tmpdir}/default_output"
+        end
+      end
+
+      context "for a formatter with no default output path" do
+        before do
+          klass = Class.new(Formatters::BaseFormatter)
+          Object.const_set(:TestFormatter, klass)
+        end
+
+        after do
+          Object.send(:remove_const, :TestFormatter)
+        end
+
+        it "sets the output to the configuration output" do
+          config.output = StringIO.new
+          config.add_formatter TestFormatter
+          formatter = config.formatters.first
+          formatter.output.should equal(config.output)
+        end
+      end
+
       context "with a 2nd arg defining the output" do
         it "creates a file at that path and sets it as the output" do
           path = File.join(Dir.tmpdir, 'output.txt')
