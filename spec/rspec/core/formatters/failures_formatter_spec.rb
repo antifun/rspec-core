@@ -35,4 +35,13 @@ describe RSpec::Core::Formatters::FailuresFormatter do
     data = YAML.load(@output.string)
     data[:examples].should == ['test example 1', 'test example 3']
   end
+
+  describe "#default_output_path" do
+    it "returns the configured failure file" do
+      configuration = RSpec::Core::Configuration.new
+      configuration.failure_file = 'path'
+      path = RSpec::Core::Formatters::FailuresFormatter.default_output_path(configuration)
+      path.should == 'path'
+    end
+  end
 end

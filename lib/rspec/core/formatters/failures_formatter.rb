@@ -5,8 +5,8 @@ module RSpec
   module Core
     module Formatters
       class FailuresFormatter < BaseFormatter
-        def self.default_output_path
-          @default_output_path ||= File.expand_path('.rspec_failures.yml')
+        def self.default_output_path(configuration)
+          @default_output_path ||= configuration.failure_file
         end
 
         def initialize(output)

@@ -22,7 +22,7 @@ module RSpec
         # If nil, output to standard output by default. Otherwise
         # output to a file at this path. The output may always be
         # overridden using an -o/--out argument.
-        def self.default_output_path
+        def self.default_output_path(configuration)
           nil
         end
 

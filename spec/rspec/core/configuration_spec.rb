@@ -622,7 +622,7 @@ module RSpec::Core
       context "for a formatter with a default output path" do
         before do
           klass = Class.new(Formatters::BaseFormatter)
-          def klass.default_output_path
+          def klass.default_output_path(configuration)
             "#{Dir.tmpdir}/default_output"
           end
           Object.const_set(:TestFormatter, klass)

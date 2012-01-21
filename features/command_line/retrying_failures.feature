@@ -12,6 +12,14 @@ Feature: Retrying Failures
     $ rspec --retry             # retry the failures
     $ rspec --retry=1-3,5       # retry just these failures
 
+  You can specify the file to record the failures in with --failure-file:
+
+    $ rspec --failure-file /path/to/file --format failures
+    $ rspec --failure-file --retry
+
+  Of course the failure file may be specified in an options file or as
+  a configuration setting instead of on the command line.
+
   Scenario: running specs with the failure formatter enabled
     Given a file named "example_spec.rb" with:
       """

@@ -460,7 +460,7 @@ EOM
 
       # @private
       def default_output_stream(klass)
-        path = klass.default_output_path
+        path = klass.default_output_path(self)
         path ? file_at(path) : output
       end
 
