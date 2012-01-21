@@ -139,6 +139,14 @@ FILTERING
           options[:full_description] = Regexp.compile(Regexp.escape(o))
         end
 
+        parser.on('-R', '--retry [NUMS]', "Run examples that failed on the last run. NUMS may specify the numbers of specific failed examples to run (example: 1,3,5-9)") do |o|
+          options[:retry] = o ? parse_ranges(o) : :all
+        end
+
+        parser.on('-F', '--failure-file PATH', "Read previously failed examples from PATH") do |o|
+          options[:failure_file] = o || true
+        end
+
         parser.on('-l', '--line_number LINE', 'Specify line number of an example or group (may be',
                                               '  used more than once).') do |o|
           (options[:line_numbers] ||= []) << o
@@ -175,6 +183,21 @@ FILTERING
           exit
         end
 
+      end
+    end
+
+    def parse_ranges(ranges)
+      ranges.split(/,/).map do |range|
+        case range
+        when /\A(\d+)\z/
+          i = $1.to_i
+          i..i
+        when /\A(\d+)-(\d+)\z/
+          a, b = $1.to_i, $2.to_i
+          a <= b or
+            next warn "invalid range: #{range} - skipping"
+          a..b
+        end
       end
     end
   end

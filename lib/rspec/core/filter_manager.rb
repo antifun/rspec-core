@@ -130,6 +130,17 @@ module RSpec
         @exclusions.clear
       end
 
+      def retry_failures(failures_to_retry, failure_data)
+        failures = failure_data[:examples]
+        if failures_to_retry == :all
+          failures_to_retry = failures
+        else
+          failures = [''].concat(failures)  # input ranges are 1-based
+          failures_to_retry = failures_to_retry.map { |range| failures[range] }.flatten
+        end
+        replace(@inclusions, @exclusions, :full_description => failures_to_retry)
+      end
+
       def empty?
         inclusions.empty? && exclusions.empty_without_conditional_filters?
       end

@@ -107,6 +107,10 @@ MESSAGE
       # The exit code to return if there are any failures (default: 1).
       add_setting :failure_exit_code
 
+      # The path to write failure data, to facilitate --retry
+      # (default: ".rspec_failures.yml").
+      add_setting :failure_file
+
       # Determines the order in which examples are run (default: OS standard
       # load order for files, declaration order for groups and examples).
       define_reader :order
@@ -186,6 +190,7 @@ MESSAGE
         @color = false
         @pattern = '**/*_spec.rb'
         @failure_exit_code = 1
+        @failure_file = ".rspec_failures.yml"
         @backtrace_clean_patterns = DEFAULT_BACKTRACE_PATTERNS.dup
         @default_path = 'spec'
         @filter_manager = FilterManager.new

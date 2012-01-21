@@ -189,6 +189,8 @@ module RSpec
           else
             value.call(metadata[key]) rescue false
           end
+        when Array
+          value.include?(metadata[key].to_s)
         else
           metadata[key].to_s == value.to_s
         end

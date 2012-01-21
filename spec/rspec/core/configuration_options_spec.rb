@@ -95,6 +95,15 @@ describe RSpec::Core::ConfigurationOptions do
       config.should_receive(:debug=).with(true)
       opts.configure(config)
     end
+
+    it "sends failures to retry to the filter manager" do
+      failure_data = {:key => 'value'}
+      File.open("failures.yml", 'w') { |f| f.print failure_data.to_yaml }
+      opts = config_options_object('--retry', '--failure-file=failures.yml')
+      config = RSpec::Core::Configuration.new
+      opts.filter_manager.should_receive(:retry_failures).with(:all, failure_data)
+      opts.configure(config)
+    end
   end
 
   describe "-c, --color, and --colour" do
@@ -146,6 +155,26 @@ describe RSpec::Core::ConfigurationOptions do
 
     example "can accept a class name" do
       parse_options('-fSome::Formatter::Class').should include(:formatters => [['Some::Formatter::Class']])
+    end
+  end
+
+  describe "--failure-file, -F" do
+    it "sets :failure_file" do
+      [['--failure-file', 'path'], ['-F', 'path']].each do |args|
+        parse_options(*args).should include(:failure_file => 'path')
+      end
+    end
+  end
+
+  describe "--retry, -R" do
+    it "sets :retry to :all when no argument is given" do
+      parse_options('-R').should include(:retry => :all)
+      parse_options('--retry').should include(:retry => :all)
+    end
+
+    it "sets :retry to the list of ranges if an argument is given" do
+      parse_options('-R', '1,3-5,7').should include(:retry => [1..1, 3..5, 7..7])
+      parse_options('--retry', '1,3-5,7').should include(:retry => [1..1, 3..5, 7..7])
     end
   end
 

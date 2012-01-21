@@ -12,11 +12,17 @@ module RSpec
 
       def configure(config)
         formatters = options.delete(:formatters)
+        failures_to_retry = options.delete(:retry)
 
         config.filter_manager = filter_manager
 
         order(options.keys, :libs, :requires, :default_path, :pattern).each do |key|
           force?(key) ? config.force(key => options[key]) : config.send("#{key}=", options[key]) 
+        end
+
+        if failures_to_retry
+          failure_data = YAML.load_file(File.expand_path(config.failure_file))
+          filter_manager.retry_failures(failures_to_retry, failure_data)
         end
 
         formatters.each {|pair| config.add_formatter(*pair) } if formatters

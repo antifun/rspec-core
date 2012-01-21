@@ -82,6 +82,29 @@ module RSpec::Core
       end
     end
 
+    %w[-F --failure-file].each do |option|
+      describe option do
+        it "sets the failure file" do
+          options = Parser.parse!([option, 'path'])
+          options[:failure_file].should eq('path')
+        end
+      end
+    end
+
+    %w[-R --retry].each do |option|
+      describe option do
+        it "retries all failed examples if no argument is given" do
+          options = Parser.parse!([option])
+          options[:retry].should eq(:all)
+        end
+
+        it "parses the argument as a comma-separated list of numbers and ranges" do
+          options = Parser.parse!([option, '1,3-5,7'])
+          options[:retry].should eq([1..1, 3..5, 7..7])
+        end
+      end
+    end
+
     %w[--tag -t].each do |option|
       describe option do
         context "without ~" do

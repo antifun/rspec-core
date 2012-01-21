@@ -169,6 +169,13 @@ module RSpec
             metadata_with_array.filter_applies?(:tag, lambda { |values| values.include? 'nothing' }).should be_false
           end
         end
+
+        context "matching against an array value" do
+          it "matches if any filter value matches the metadata value" do
+            example_metadata.filter_applies?(:full_description, ['x', 'parent group group example', 'x']).should be_true
+            example_metadata.filter_applies?(:full_description, ['x', 'x']).should be_false
+          end
+        end
       end
 
       describe "#for_example" do

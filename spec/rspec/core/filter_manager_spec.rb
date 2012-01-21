@@ -252,5 +252,21 @@ module RSpec::Core
         filter_manager.inclusions.should eq(filter => "a_value")
       end
     end
+
+    describe "#retry_failures" do
+      let(:failure_data) { {:examples => ['a', 'b', 'c', 'd']} }
+
+      it "includes all failures if all failures are to be retry" do
+        filter_manager = FilterManager.new
+        filter_manager.retry_failures(:all, failure_data)
+        filter_manager.inclusions.should eq(:full_description => ['a', 'b', 'c', 'd'])
+      end
+
+      it "includes only the selected failures if explicit failure ranges are given" do
+        filter_manager = FilterManager.new
+        filter_manager.retry_failures([1..2, 4..4], failure_data)
+        filter_manager.inclusions.should eq(:full_description => ['a', 'b', 'd'])
+      end
+    end
   end
 end
