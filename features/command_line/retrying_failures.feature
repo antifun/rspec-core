@@ -5,7 +5,12 @@ Feature: Retrying Failures
   First, you need to record the failing examples by enabling the
   failures formatter. You can do this as follows:
 
-    $ rspec --format failures
+    $ rspec --format failures   # record the failures
+
+  Then to retry the failing examples, do one of these:
+
+    $ rspec --retry             # retry the failures
+    $ rspec --retry=1-3,5       # retry just these failures
 
   Scenario: running specs with the failure formatter enabled
     Given a file named "example_spec.rb" with:
