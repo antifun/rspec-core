@@ -1,4 +1,5 @@
 require 'erb'
+require 'yaml'
 
 module RSpec
   module Core
