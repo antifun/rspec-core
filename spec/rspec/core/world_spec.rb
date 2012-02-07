@@ -9,6 +9,16 @@ module RSpec::Core
     let(:configuration) { RSpec::Core::Configuration.new }
     let(:world) { RSpec::Core::World.new(configuration) }
 
+    describe '#reset' do
+      it 'clears #example_groups and #shared_example_groups' do
+        world.example_groups << :example_group
+        world.shared_example_groups[:shared] = :example_group
+        world.reset
+        world.example_groups.should be_empty
+        world.shared_example_groups.should be_empty
+      end
+    end
+
     describe "#example_groups" do
       it "contains all registered example groups" do
         group = RSpec::Core::ExampleGroup.describe("group"){}
@@ -64,7 +74,7 @@ module RSpec::Core
       context "with two exaples and the second example is registre first" do
         let(:second_group_declaration_line) { second_group.metadata[:example_group][:line_number] }
 
-        before do 
+        before do
           world.register(second_group)
           world.register(group)
         end

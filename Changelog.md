@@ -1,10 +1,18 @@
 ### dev
 
+Enhancements
+
+* Support for "X minutes X seconds" spec run duration in formatter. (uzzz)
+* Strip whitespace from group and example names in doc formatter.
+
 Bug fixes
 
 * Restore `--full_backtrace` option
 * Ensure that values passed to `config.filter_run` are respected when running
   over DRb (using spork).
+* Ensure shared example groups are reset after a run (as example groups are).
+* Remove `rescue false` from calls to filters represented as Procs
+* Ensure described_class gets the closest constant (pyromaniac)
 
 ### 2.8.0 / 2012-01-04
 

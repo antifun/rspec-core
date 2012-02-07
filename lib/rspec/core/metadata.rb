@@ -102,8 +102,8 @@ module RSpec
 
         def described_class
           container_stack.each do |g|
-            return g[:describes]       if g.has_key?(:describes)
             return g[:described_class] if g.has_key?(:described_class)
+            return g[:describes]       if g.has_key?(:describes)
           end
 
           container_stack.reverse.each do |g|
@@ -174,20 +174,15 @@ module RSpec
         return metadata.location_filter_applies?(value)          if key == :locations
         return metadata.filters_apply?(key, value)               if Hash === value
 
+        return false unless metadata.has_key?(key)
+
         case value
         when Regexp
           metadata[key] =~ value
         when Proc
-          if value.arity == 2
-            # Pass the metadata hash to allow the proc to check if it even has the key.
-            # This is necessary for the implicit :if exclusion filter:
-            #   {            } # => run the example
-            #   { :if => nil } # => exclude the example
-            # The value of metadata[:if] is the same in these two cases but
-            # they need to be treated differently.
-            value.call(metadata[key], metadata) rescue false
-          else
-            value.call(metadata[key]) rescue false
+          case value.arity
+          when 1 then value.call(metadata[key])
+          when 2 then value.call(metadata[key], metadata)
           end
         when Array
           value.include?(metadata[key].to_s)

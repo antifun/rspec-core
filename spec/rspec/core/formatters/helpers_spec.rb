@@ -4,6 +4,26 @@ require 'rspec/core/formatters/helpers'
 describe RSpec::Core::Formatters::Helpers do
   let(:helper) { Object.new.extend(RSpec::Core::Formatters::Helpers) }
 
+  describe "format duration" do
+    context '> 60 and < 120' do
+      it "returns 'x minute xx seconds' formatted string" do
+        helper.format_duration(70.14).should eq("1 minute 10.14 seconds")
+      end
+    end
+
+    context '> 120' do
+      it "returns 'x minutes xx seconds' formatted string" do
+        helper.format_duration(135.14).should eq("2 minutes 15.14 seconds")
+      end
+    end
+
+    context '< 60' do
+      it "returns 'xx seconds' formatted string" do
+        helper.format_duration(45.5).should eq("45.5 seconds")
+      end
+    end
+  end
+
   describe "format seconds" do
     context "sub second times" do
       it "returns 5 digits of precision" do
