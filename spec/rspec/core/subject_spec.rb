@@ -194,6 +194,35 @@ module RSpec::Core
         end
       end
 
+      context "with nil subject" do
+        subject do
+          Class.new do
+            def initialize
+              @counter = -1
+            end
+            def nil_if_first_time
+              @counter += 1
+              @counter == 0 ? nil : true
+            end
+          end.new
+        end
+        its(:nil_if_first_time) { should be(nil) }
+      end
+
+      context "with false subject" do
+        subject do
+          Class.new do
+            def initialize
+              @counter = -1
+            end
+            def false_if_first_time
+              @counter += 1
+              @counter > 0
+            end
+          end.new
+        end
+        its(:false_if_first_time) { should be(false) }
+      end
     end
   end
 end

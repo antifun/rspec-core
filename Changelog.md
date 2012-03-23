@@ -1,9 +1,12 @@
-### dev
+### 2.9.0 / 2012-03-17
+[full changelog](http://github.com/rspec/rspec-core/compare/v2.8.0...v2.9.0)
 
 Enhancements
 
 * Support for "X minutes X seconds" spec run duration in formatter. (uzzz)
 * Strip whitespace from group and example names in doc formatter.
+* Removed spork-0.9 shim. If you're using spork-0.8.x, you'll need to upgrade
+  to 0.9.0.
 
 Bug fixes
 
@@ -13,6 +16,10 @@ Bug fixes
 * Ensure shared example groups are reset after a run (as example groups are).
 * Remove `rescue false` from calls to filters represented as Procs
 * Ensure described_class gets the closest constant (pyromaniac)
+* In "autorun", don't run the specs in the at_exit hook if there was an
+  exception (most likely due to a SyntaxError). (sunaku)
+* Don't extend groups with modules already used to extend ancestor groups.
+* `its` correctly memoizes nil or false values (Yamada Masaki)
 
 ### 2.8.0 / 2012-01-04
 
